@@ -13,13 +13,22 @@ def load_items():
         return pd.DataFrame()
     with open(p, "rb") as f:
         head = f.read(200)
-    # UTF-16 LE BOM
     if head[:2] == b"\xff\xfe":
-        return pd.read_csv(p, encoding="utf-16", sep="\t")
-    # UTF-8 (with or without BOM) — detect separator
-    sample = head.decode("utf-8-sig", errors="ignore")
-    sep = "\t" if "\t" in sample else ","
-    return pd.read_csv(p, encoding="utf-8-sig", sep=sep)
+        df = pd.read_csv(p, encoding="utf-16", sep="\t")
+    else:
+        sample = head.decode("utf-8-sig", errors="ignore")
+        sep = "\t" if "\t" in sample else ","
+        df = pd.read_csv(p, encoding="utf-8-sig", sep=sep)
+    col_map = {
+        "02. 자재코드": "자재코드", "04. 자재명": "자재명",
+        "08. 박스구분": "박스구분", "09. 박스형태": "박스형태",
+        "10. 박스유형": "박스유형", "11. 박스재질": "벽체",
+        "12. 원자재코드": "원자재코드", "14. 원자재코드명": "원자재코드명",
+        "15. 가공방법": "가공방법", "16. 가로": "가로",
+        "17. 세로": "세로", "18. 높이": "높이",
+    }
+    df = df.rename(columns={k: v for k, v in col_map.items() if k in df.columns})
+    return df
 
 @st.cache_data(ttl=300)
 def load_materials():
