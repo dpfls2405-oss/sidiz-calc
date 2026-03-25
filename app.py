@@ -126,7 +126,7 @@ def render_result(L, W, H, t, mat, box_kind=None, process=None, subtype=None):
 tab1, tab2, tab3, tab4 = st.tabs(["🔍  박스 자재코드로 계산", "📐  원자재코드 + 수동입력", "🏭  원자재 마스터 관리", "📖  KS 규격 참조"])
 
 with tab1:
-    st.markdown('<div class="card"><div class="card-title"><div class="icon" style="background:#eff6ff;color:#3b82f6;">🔍</div> 박스 자재코드 검색</div><p style="font-size:.75rem;color:#64748b;margin:0;"><strong>박스 자재코드</strong>는 시디즈 포장 자재 관리 코드입니다 (예: <code>C41-6B-7003</code>). 원자재코드(<code>PPRPRP...</code>)와는 다릅니다.</p></div>', unsafe_allow_html=True)
+    st.markdown('<div class="card"><div class="card-title"><div class="icon" style="background:#eff6ff;color:#3b82f6;">🔍</div> 박스 자재코드 검색</div><p style="font-size:.75rem;color:#64748b;margin:0;"><strong>박스 자재코드</strong>는 시디즈 포장 자재 관리 코드입니다 </p></div>', unsafe_allow_html=True)
     if len(items_df) > 0:
         search = st.text_input("검색", placeholder="박스 자재코드 또는 자재명 입력 (예: C41-6B, T50, 포장박스)", label_visibility="collapsed", key="item_search")
         if search and len(search) >= 2:
