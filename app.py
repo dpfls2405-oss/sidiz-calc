@@ -12,11 +12,14 @@ def load_items():
     if not os.path.exists(p):
         return pd.DataFrame()
     with open(p, "rb") as f:
-        head = f.read(2)
-    if head == b"\xff\xfe":
+        head = f.read(200)
+    # UTF-16 LE BOM
+    if head[:2] == b"\xff\xfe":
         return pd.read_csv(p, encoding="utf-16", sep="\t")
-    else:
-        return pd.read_csv(p, encoding="utf-8-sig")
+    # UTF-8 (with or without BOM) — detect separator
+    sample = head.decode("utf-8-sig", errors="ignore")
+    sep = "\t" if "\t" in sample else ","
+    return pd.read_csv(p, encoding="utf-8-sig", sep=sep)
 
 @st.cache_data(ttl=300)
 def load_materials():
